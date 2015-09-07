@@ -25,9 +25,7 @@ package br.com.esign.logistics.test.restassured;
 
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -67,6 +65,71 @@ public class RESTTest {
                 .body("data.slug", notNullValue())
             .extract()
                 .path("data.slug");
+    }
+    
+    /**
+     * Checks map existence.
+     */
+    @Test
+    public void testB() {
+        RestAssured
+            .when()
+                .get()
+            .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("code", equalTo(200))
+                .body("status", equalTo("success"))
+                .body("data", hasSize(greaterThan(0)))
+                .body("data", hasItem(hasEntry("slug", slug)));
+    }
+    
+    /**
+     * Creates routes for the map.
+     */
+    @Test
+    public void testC() {
+        RestAssured
+            .given()
+                .contentType(ContentType.JSON)
+                .body("{\"origin\": {\"name\": \"A\"}, \"destination\": {\"name\": \"B\"}, \"distance\": 10}")
+                .pathParam("slug", slug)
+            .when()
+                .post("/{slug}/routes")
+            .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("code", equalTo(200))
+                .body("status", equalTo("success"))
+                .body("data", hasSize(2));
+        
+        RestAssured
+            .given()
+                .contentType(ContentType.JSON)
+                .body("{\"origin\": {\"name\": \"B\"}, \"destination\": {\"name\": \"D\"}, \"distance\": 15}")
+                .pathParam("slug", slug)
+            .when()
+                .post("/{slug}/routes")
+            .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("code", equalTo(200))
+                .body("status", equalTo("success"))
+                .body("data", hasSize(2));
+        
+        RestAssured
+            .given()
+                .contentType(ContentType.JSON)
+                .body("{\"origin\": {\"name\": \"A\"}, \"destination\": {\"name\": \"C\"}, \"distance\": 20}")
+                .pathParam("slug", slug)
+            .when()
+                .post("/{slug}/routes")
+            .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("code", equalTo(200))
+                .body("status", equalTo("success"))
+                .body("data", hasSize(2));
     }
     
     /**
