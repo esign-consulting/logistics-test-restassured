@@ -38,7 +38,8 @@ import org.junit.runners.MethodSorters;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RESTTest {
     
-    private static String slug;
+    private static String mapSlug;
+    private static String routeSlug;
     
     @Before
     public void setup() {
@@ -50,7 +51,7 @@ public class RESTTest {
      */
     @Test
     public void testA() {
-        slug = RestAssured
+        mapSlug = RestAssured
             .given()
                 .contentType(ContentType.JSON)
                 .body("{\"name\": \"REST-assured Test\"}")
@@ -81,19 +82,39 @@ public class RESTTest {
                 .body("code", equalTo(200))
                 .body("status", equalTo("success"))
                 .body("data", hasSize(greaterThan(0)))
-                .body("data", hasItem(hasEntry("slug", slug)));
+                .body("data", hasItem(hasEntry("slug", mapSlug)));
     }
     
     /**
-     * Creates routes for the map.
+     * Checks the unique map constraint.
      */
     @Test
     public void testC() {
         RestAssured
             .given()
                 .contentType(ContentType.JSON)
+                .body("{\"name\": \"REST-assured Test\"}")
+            .when()
+                .post()
+            .then()
+                .statusCode(500)
+                .contentType(ContentType.JSON)
+                .body("code", equalTo(500))
+                .body("status", equalTo("fail"))
+                .body("data", nullValue())
+                .body("message", equalTo("The map already exists."));
+    }
+    
+    /**
+     * Creates routes for the map.
+     */
+    @Test
+    public void testD() {
+        RestAssured
+            .given()
+                .contentType(ContentType.JSON)
                 .body("{\"origin\": {\"name\": \"A\"}, \"destination\": {\"name\": \"B\"}, \"distance\": 10}")
-                .pathParam("slug", slug)
+                .pathParam("slug", mapSlug)
             .when()
                 .post("/{slug}/routes")
             .then()
@@ -107,7 +128,7 @@ public class RESTTest {
             .given()
                 .contentType(ContentType.JSON)
                 .body("{\"origin\": {\"name\": \"B\"}, \"destination\": {\"name\": \"D\"}, \"distance\": 15}")
-                .pathParam("slug", slug)
+                .pathParam("slug", mapSlug)
             .when()
                 .post("/{slug}/routes")
             .then()
@@ -117,11 +138,11 @@ public class RESTTest {
                 .body("status", equalTo("success"))
                 .body("data", hasSize(2));
         
-        RestAssured
+        routeSlug = RestAssured
             .given()
                 .contentType(ContentType.JSON)
                 .body("{\"origin\": {\"name\": \"A\"}, \"destination\": {\"name\": \"C\"}, \"distance\": 20}")
-                .pathParam("slug", slug)
+                .pathParam("slug", mapSlug)
             .when()
                 .post("/{slug}/routes")
             .then()
@@ -129,17 +150,83 @@ public class RESTTest {
                 .contentType(ContentType.JSON)
                 .body("code", equalTo(200))
                 .body("status", equalTo("success"))
-                .body("data", hasSize(2));
+                .body("data", hasSize(2))
+            .extract()
+                .path("data[0].slug");
+    }
+    
+    /**
+     * Checks the unique route constaint.
+     */
+    @Test
+    public void testE() {
+        RestAssured
+            .given()
+                .contentType(ContentType.JSON)
+                .body("{\"origin\": {\"name\": \"A\"}, \"destination\": {\"name\": \"C\"}, \"distance\": 20}")
+                .pathParam("slug", mapSlug)
+            .when()
+                .post("/{slug}/routes")
+            .then()
+                .statusCode(500)
+                .contentType(ContentType.JSON)
+                .body("code", equalTo(500))
+                .body("status", equalTo("fail"))
+                .body("data", nullValue())
+                .body("message", equalTo("The route already exists."));
+    }
+    
+    /**
+     * Removes last route.
+     */
+    @Test
+    public void testF() {
+        RestAssured
+            .given()
+                .pathParam("mapSlug", mapSlug)
+                .pathParam("routeSlug", routeSlug)
+            .when()
+                .delete("/{mapSlug}/routes/{routeSlug}")
+            .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("code", equalTo(200))
+                .body("status", equalTo("success"))
+                .body("data", nullValue());
+    }
+    
+    /**
+     * Tests best route functionality.
+     */
+    @Test
+    public void testG() {
+        RestAssured
+            .given()
+                .pathParam("mapSlug", mapSlug)
+                .queryParam("originName", "A")
+                .queryParam("destinationName", "D")
+                .queryParam("autonomy", 10)
+                .queryParam("gasPrice", 2.50)
+            .when()
+                .get("/{mapSlug}/bestRoute")
+            .then()
+                .statusCode(200)
+                .contentType(ContentType.JSON)
+                .body("code", equalTo(200))
+                .body("status", equalTo("success"))
+                .body("data", notNullValue())
+                .body("data.name", equalTo("A -> B -> D"))
+                .body("data.cost", equalTo(6.25f));
     }
     
     /**
      * Removes the map.
      */
     @Test
-    public void testF() {
+    public void testH() {
         RestAssured
             .given()
-                .pathParam("slug", slug)
+                .pathParam("slug", mapSlug)
             .when()
                 .delete("/{slug}")
             .then()
