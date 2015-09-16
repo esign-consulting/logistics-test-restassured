@@ -1,0 +1,71 @@
+{
+    "title": "Routes Map REST Web Service Response Schema (Route Resource)",
+    "type": "object",
+    "properties": {
+        "code": {
+            "type": "integer",
+            "minimum": 200,
+            "maximum": 200
+        },
+        "status": {
+            "enum": ["success"]
+        },
+        "data": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "slug": {
+                        "type": "string"
+                    },
+                    "origin": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            }
+                        },
+                        "required": ["name"]
+                    },
+                    "destination": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            }
+                        },
+                        "required": ["name"]
+                    },
+                    "distance": {
+                        "type": "number"
+                    },
+                    "links": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "rel": {
+                                    "type": "string"
+                                },
+                                "href": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": ["rel", "href"]
+                        },
+                        "minItems": 1,
+                        "uniqueItems": true
+                    }
+                },
+                "required": ["name", "slug", "origin", "destination", "distance", "links"]
+            },
+            "minItems": 2,
+            "maxItems": 2,
+            "uniqueItems": true
+        }
+    },
+    "required": ["code", "status", "data"]
+}

@@ -1,0 +1,21 @@
+{
+    "title": "Routes Map REST Web Service Bad Response Schema",
+    "type": "object",
+    "properties": {
+        "code": {
+            "type": "integer",
+            "minimum": 400,
+            "maximum": 599
+        },
+        "status": {
+            "enum": ["error", "fail"]
+        },
+        "data": {
+            "type": "null"
+        },
+        "message": {
+            "type": "string"
+        }
+    },
+    "required": ["code", "status", "data", "message"]
+}

@@ -1,0 +1,51 @@
+{
+    "title": "Routes Map REST Web Service Response Schema (Best Route Resource)",
+    "type": "object",
+    "properties": {
+        "code": {
+            "type": "integer",
+            "minimum": 200,
+            "maximum": 200
+        },
+        "status": {
+            "enum": ["success"]
+        },
+        "data": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "slug": {
+                    "type": "null"
+                },
+                "origin": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["name"]
+                },
+                "destination": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["name"]
+                },
+                "distance": {
+                    "type": "number"
+                },
+                "cost": {
+                    "type": "number"
+                }
+            },
+            "required": ["name", "slug", "origin", "destination", "distance", "cost"]
+        }
+    },
+    "required": ["code", "status", "data"]
+}
