@@ -43,6 +43,12 @@ public class RESTTest {
     
     @Before
     public void setup() {
+        String host = System.getProperty("server.host");
+        if (host != null && !host.isEmpty())
+            RestAssured.baseURI = host;
+        String port = System.getProperty("server.port");
+        if (port != null && !port.isEmpty())
+            RestAssured.port = Integer.valueOf(port);
         RestAssured.basePath = "/logistics/api/maps";
     }
     
