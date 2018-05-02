@@ -157,7 +157,8 @@ public class RESTTest {
                 .contentType(ContentType.JSON)
                 .body("code", equalTo(200))
                 .body("status", equalTo("success"))
-                .body("data", hasSize(2))
+                .body("data[0].slug", equalTo("a-c"))
+                .body("data[1].slug", equalTo("c-a"))
             .extract()
                 .path("data[0].slug");
     }
