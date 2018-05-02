@@ -68,8 +68,7 @@ public class RESTTest {
                 .contentType(ContentType.JSON)
                 .body("code", equalTo(200))
                 .body("status", equalTo("success"))
-                .body("data", notNullValue())
-                .body("data.slug", notNullValue())
+                .body("data.slug", equalTo("rest-assured-test"))
             .extract()
                 .path("data.slug");
     }
@@ -128,7 +127,8 @@ public class RESTTest {
                 .contentType(ContentType.JSON)
                 .body("code", equalTo(200))
                 .body("status", equalTo("success"))
-                .body("data", hasSize(2));
+                .body("data[0].slug", equalTo("a-b"))
+                .body("data[1].slug", equalTo("b-a"));
         
         RestAssured
             .given()
@@ -142,7 +142,8 @@ public class RESTTest {
                 .contentType(ContentType.JSON)
                 .body("code", equalTo(200))
                 .body("status", equalTo("success"))
-                .body("data", hasSize(2));
+                .body("data[0].slug", equalTo("b-d"))
+                .body("data[1].slug", equalTo("d-b"));
         
         routeSlug = RestAssured
             .given()
