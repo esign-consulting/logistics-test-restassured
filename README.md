@@ -1,6 +1,6 @@
 # logistics-test-restassured
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Build status](https://travis-ci.org/esign-consulting/logistics-test-restassured.svg?branch=master)](https://travis-ci.org/esign-consulting/logistics-test-restassured)
 
 Project for API testing the [Logistics](https://github.com/esign-consulting/logistics) application. The test is based on [REST-assured](http://rest-assured.io) and is executed through [Maven](https://maven.apache.org) **(installation required)**.
 
