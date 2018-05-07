@@ -1,0 +1,12 @@
+language: java
+install: true
+
+jdk:
+  - oraclejdk8
+
+script:
+  - mvn test -Dserver.host=http://www.esign.com.br
+
+cache:
+  directories:
+    - '$HOME/.m2/repository'
