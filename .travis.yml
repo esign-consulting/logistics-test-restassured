@@ -5,7 +5,7 @@ jdk:
   - oraclejdk8
 
 script:
-  - mvn test -Dserver.host=http://www.esign.com.br
+  - mvn test -Dserver.host=http://$LOGISTICS_HOST
 
 cache:
   directories:
