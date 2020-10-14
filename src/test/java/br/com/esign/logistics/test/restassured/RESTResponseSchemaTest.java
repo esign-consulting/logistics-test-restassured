@@ -23,9 +23,9 @@
  */
 package br.com.esign.logistics.test.restassured;
 
-import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.http.ContentType;
-import static com.jayway.restassured.module.jsv.JsonSchemaValidator.*;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import static io.restassured.module.jsv.JsonSchemaValidator.*;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.Test;

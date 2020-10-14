@@ -23,8 +23,8 @@
  */
 package br.com.esign.logistics.test.restassured;
 
-import com.jayway.restassured.RestAssured;
-import com.jayway.restassured.http.ContentType;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import static org.hamcrest.Matchers.*;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
