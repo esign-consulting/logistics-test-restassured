@@ -16,4 +16,4 @@ jobs:
         java-version: 11
         cache: 'maven'
     - name: Run API Test
-      run: mvn test -Dserver.host=http:///www.esign.com.br
+      run: mvn test -Dserver.host=http://www.esign.com.br
