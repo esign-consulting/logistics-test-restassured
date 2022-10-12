@@ -15,5 +15,8 @@ jobs:
         distribution: 'microsoft'
         java-version: 11
         cache: 'maven'
+    - uses: isbang/compose-action@v1.3.2
+      with:
+        compose-file: docker-compose.yml
     - name: Run API Test
-      run: mvn test -Dserver.host=http://www.esign.com.br
+      run: mvn test -Dserver.host=http://localhost -Dserver.port=8080
